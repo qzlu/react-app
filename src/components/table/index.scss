@@ -1,0 +1,41 @@
+.zw-table{
+    height: 100%;
+    background: rgba($color: #0E1C43, $alpha: 0.62);
+    border-radius: 6px;
+    .title{
+        text-align: left;
+        padding:19px 0 10px 7px ;
+        font-size: 18px;
+        .iconfont{
+            font-size: 24px;
+            margin-right: 6px;
+        }
+    }
+    .table-header{
+        width: 100%;
+    }
+    tr{
+        height: 36px;
+        line-height: 36px;
+        th{
+            font-size: 14px;
+        }
+    }
+    .table-body{
+          table{
+              width: 100%;
+              tr{
+                  td.warning{
+                      color: #E0E213
+                  }
+              }
+              tr:nth-of-type(2n+1){
+                  background:rgba(158,229,243,0.3);
+              }
+              tr:nth-of-type(2n){
+                  background:rgba(7,148,207,0.3);
+              }
+          }
+    }
+
+}
