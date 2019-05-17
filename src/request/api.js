@@ -5,14 +5,14 @@
  */
 import {post } from './http';
 const Check = p => post('Check', p);
-const Device = p => post('Device',p)
+const HomePage = p => post('HomePage',p)
 const Project = p => post('Project',p)
 const Alarm = p => post('Alarm',p)
 const Building = p => post('Building',p)
 const System = p => post('System', p)
 export{
     Check,
-    Device,
+    HomePage,
     Project,
     Alarm,
     Building,

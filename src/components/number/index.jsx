@@ -1,6 +1,5 @@
 import  React from 'react'
 import './index.scss'
-import { spawn } from 'child_process';
 export default class Number extends React.Component{
     constructor(props){
         super(props)

@@ -62,7 +62,7 @@ export function post(url, params) {
             ProjectID:'',
             FVersion:"1.0.0",		
         }
-        axios.post(url,Object.assign(obj,params))
+        axios.post(url,{...obj,...params})
         .then(res => {
             resolve(res.data);
         })

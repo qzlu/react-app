@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route,Switch } from "react-router-dom";
-import routes from './router/index'
+import routes from '@/router/index'
 class App extends React.Component {
   constructor(props){
     super(props)

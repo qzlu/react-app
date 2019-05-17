@@ -1,7 +1,8 @@
 import React from 'react';
 import {Dropdown} from 'element-react'
-import {Number,Table} from '../../components/index'
+import {Number,Table} from '@/components/index'
 import Scrollbar from 'react-scrollbar'
+import {HomePage} from '@/request/api.js'
 import './index.scss'
 const BMap = window.BMap
 export default class Index extends React.Component{
@@ -73,6 +74,7 @@ export default class Index extends React.Component{
         this.initMap = this.initMap.bind(this)
         this.logOut = this.logOut.bind(this)
         this.dropdownItemClick = this.dropdownItemClick.bind(this)
+        this.queryData = this.queryData.bind(this)
     }
     dropdownItemClick(val){
         if(val === '1'){
@@ -83,6 +85,16 @@ export default class Index extends React.Component{
     }
     logOut(){
         this.props.history.push('/Login')
+    }
+    queryData(){
+        HomePage({
+            FAction:'QueryBlocHomePageCount'
+        })
+        .then((data) => {
+            console.log(data)
+        }).catch((err) => {
+        
+        });
     }
     /**
      * 初始化百度地图
@@ -99,6 +111,7 @@ export default class Index extends React.Component{
         map.setMapStyle({style:'midnight'});
     }
     componentWillMount(){
+        this.queryData()
     }
     componentDidMount(){
       this.initMap()

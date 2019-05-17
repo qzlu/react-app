@@ -1,6 +1,7 @@
 import React from 'react';
 import {Checkbox,Button} from 'element-react'
-import {Check}  from '../../request/api.js'
+import {Check}  from '@/request/api.js'
+import Md5 from 'js-md5'
 import './login.scss'
 class Login extends React.Component {
     constructor(props){
@@ -53,7 +54,7 @@ class Login extends React.Component {
             Check({
                 FAction:'Login',
                 FUserName:_this.userName,
-                FPassword:_this.psd,
+                FPassword:Md5(_this.psd),
                 TerminalType:'PC'
             })
             .then((data) => {
