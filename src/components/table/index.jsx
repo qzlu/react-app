@@ -15,6 +15,7 @@ export default class Table extends React.Component{
                 <th key={i} width={item.width}>{item.label}</th>
             )
         })
+        console.log(this.props.data)
         const row = this.props.data.map((item,i) => {
             const colum = this.props.label.map((element,j) => {
                 return(

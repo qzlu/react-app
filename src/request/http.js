@@ -2,12 +2,12 @@
 import axios from 'axios';
 import {messageErr} from '../plugins/statusCode.js'
 // 环境的切换
-if (process.env.NODE_ENV == 'development') {    
+if (process.env.NODE_ENV === 'development') {    
     axios.defaults.baseURL = 'http://www.caszyj.com/DigitalAPI/';} 
-else if (process.env.NODE_ENV == 'debug') {    
+else if (process.env.NODE_ENV === 'debug') {    
     axios.defaults.baseURL = 'http://www.caszyj.com/DigitalAPI/';
 } 
-else if (process.env.NODE_ENV == 'production') {    
+else if (process.env.NODE_ENV === 'production') {    
     axios.defaults.baseURL = 'http://www.caszyj.com/DigitalAPI/';
 }
 
@@ -59,7 +59,7 @@ export function post(url, params) {
     return new Promise((resolve, reject) => {
         let obj = {
             FTokenID:sessionStorage.getItem('FToken'),
-            ProjectID:'',
+            ProjectID:sessionStorage.getItem('projectID'),
             FVersion:"1.0.0",		
         }
         axios.post(url,{...obj,...params})

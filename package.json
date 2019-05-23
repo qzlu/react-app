@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "echarts": "^4.2.1",
     "element-react": "^1.4.33",
     "element-theme-default": "^1.4.13",
+    "js-md5": "^0.7.3",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -15,8 +17,7 @@
     "react-scripts": "3.0.1",
     "react-scrollbar": "^0.5.6",
     "redux": "^4.0.1",
-    "sass-loader": "^7.1.0",
-    "js-md5": "^0.7.3"
+    "sass-loader": "^7.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

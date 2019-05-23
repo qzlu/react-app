@@ -1,75 +1,41 @@
 import React from 'react';
-import {Dropdown} from 'element-react'
 import {Number,Table} from '@/components/index'
 import Scrollbar from 'react-scrollbar'
 import {HomePage} from '@/request/api.js'
-import './index.scss'
+import LeftSide from './leftSide.jsx'
 const BMap = window.BMap
 export default class Index extends React.Component{
     constructor(props){
         super(props)
         this.state = {
             map:null,
+            count:{},
+            systemList:[], //系统列表（左侧数据）
+            fireList:[], //火警信息列表（右侧数据）
+            fireAlarmData:null,
+            wariningData:null,
             tableLabel:[
                 {
                     label:'项目',
-                    prop:'name',
+                    prop:'ShortName',
                     width:'25%'
                 },
                 {
                     label:'告警时间',
-                    prop:'time',
-                    width:'25%'
+                    prop:'AlarmTime',
+                    width:'30%'
                 },
                 {
                     label:'告警内容',
-                    prop:'content',
+                    prop:'AlarmText',
                     width:'25%'
                 },
                 {
                     label:'当前值',
-                    prop:'value',
-                    width:'25%'
+                    prop:'AlarmData',
+                    width:'20%'
                 }
             ],
-            data:[
-                {
-                    name:'中物互联',
-                    time:'10:00',
-                    content:'过流',
-                    value:'100A'
-                },
-                {
-                    name:'中物互联',
-                    time:'10:00',
-                    content:'过流',
-                    value:'100A'
-                },
-                {
-                    name:'中物互联',
-                    time:'10:00',
-                    content:'过流',
-                    value:'100A'
-                },
-                {
-                    name:'中物互联',
-                    time:'10:00',
-                    content:'过流',
-                    value:'100A'
-                },
-                {
-                    name:'中物互联',
-                    time:'10:00',
-                    content:'过流',
-                    value:'100A'
-                },
-                {
-                    name:'中物互联',
-                    time:'10:00',
-                    content:'过流',
-                    value:'100A'
-                },
-            ]
         }
         this.initMap = this.initMap.bind(this)
         this.logOut = this.logOut.bind(this)
@@ -91,18 +57,33 @@ export default class Index extends React.Component{
             FAction:'QueryBlocHomePageCount'
         })
         .then((data) => {
-            console.log(data)
+            let [systemList,fireList,wariningData,fireAlarmData,count] = data.FObject&&data.FObject
+            this.setState({
+                systemList,
+                fireList,
+                wariningData,
+                fireAlarmData,
+                count
+            })
         }).catch((err) => {
-        
+            console.log(err)
         });
+    }
+    changeRouter(item){
+        sessionStorage.setItem('projectID',item.ProjectID)
+        sessionStorage.setItem('projectName',item.ProjectName)
+        this.props.history.push('/indexItem')
     }
     /**
      * 初始化百度地图
      */
-    async initMap(){
+    initMap(){
         let map = new BMap.Map('map')
-        await this.setState({
+        this.setState({
             map:map
+        },() => {
+            let _this = this.state
+            console.log(_this.map)
         })
         map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
         //添加地图类型控件
@@ -123,57 +104,29 @@ export default class Index extends React.Component{
       return true
     }
     render(){
-        const leftList = [1,2,3,4].map((item,i) => {
+        let _this = this.state;
+        const rightList = _this.fireList.map((item,i) => {
             return(
-                <li  key={i}>
-                <h4>
-                   <i className="iconfont icon-Lift"></i>
-                   电气火灾系统
-               </h4>
-               <div className="list-content">
-                   <div className="statu">
-                   </div>
-                   <ul className="param">
-                        {
-                            [1,2,3,4].map((obj,j) => {
-                                return(
-                                    <li key={j}>
-                                        <i className="iconfont icon-FirePump"></i>
-                                        线缆温度
-                                        <span className="value">
-                                           10 / 0
-                                        </span>
-                                    </li>
-                                )
-                            })
-                        }
-                   </ul>
-               </div>
-                </li>
-            )
-        })
-        const leftList1 = [1,2,3].map((item,i) => {
-            return(
-                <li key={i}>
-                    <h4>中物互联</h4>
+                <li key={i} onDoubleClick = {this.changeRouter.bind(this,item)}>
+                    <h4>{item.ProjectName}</h4>
                     <div className="list-content">
                        <div className="statu"></div>
                        <ul  className="param clearfix">
-                           <li className="l">
+                           <li className="l" style={{marginBottom:'30px'}}>
                                <i className="iconfont icon-FireAlarm"></i>
-                               <span className="value">0</span>
+                               <span className="value">{item.FireCount}</span>
                            </li>
-                           <li className="l" >
-                               <i className="iconfont icon-Numberofwarning"></i>
-                               <span className="value">0</span>
-                           </li>
-                           <li className="l">
-                               <i className="iconfont icon-Numberofwarning"></i>
-                               <span className="value">0</span>
+                           <li className="l" style={{marginBottom:'30px'}}>
+                               <i className="iconfont icon-Fault"></i>
+                               <span className="value">{item.FaultCount}</span>
                            </li>
                            <li className="l">
-                               <i className="iconfont icon-Numberofwarning"></i>
-                               <span className="value">0</span>
+                               <i className="iconfont icon-SZXFY-Earlywarning"></i>
+                               <span className="value">{item.WarningCount}</span>
+                           </li>
+                           <li className="l">
+                               <i className="iconfont icon-SZXFY-Operations"></i>
+                               <span className="value">{item.MaintenanceCount}</span>
                            </li>
                        </ul>
                     </div>
@@ -181,47 +134,27 @@ export default class Index extends React.Component{
             )
         })
         return (
-            <div className='home cloud'>
-                <div className="header">
-                    <span className="title">中物互联数字消防云平台</span>
-                    <ul className="clearfix">
-                        <li className='l icon'>
-                        <Dropdown menu={(
-                            <Dropdown.Menu>
-                               <Dropdown.Item command = '1'>设置密码</Dropdown.Item>
-                               <Dropdown.Item command = '2'>退出登录</Dropdown.Item>
-                             </Dropdown.Menu>
-                             )}
-                             onCommand = {this.dropdownItemClick}
-                            >
-                            <i className="iconfont icon-User"></i>
-                        </Dropdown>
-                        </li>
-                        <li className="l user-name">张三</li>
-                    </ul>
-                </div>
+            <div>
                 <div className='left-side l'>
                     <div className='side-header clearfix'>
-                        <Number number='50'></Number>
+                        <Number number={_this.fireAlarmData?_this.fireAlarmData.FTotalCount:0}></Number>
                         <span>火警总数</span>
                     </div>
                     <div className="side-content">
                         <Scrollbar horizontal={false} peed={0.8}>
-                            <ul className='list'>
-                                {leftList}
-                            </ul>
+                            <LeftSide data={_this.systemList}></LeftSide>
                         </Scrollbar>
                     </div>
                 </div>
                 <div className="right-side r">
                     <div className="side-header clearfix">
-                        <Number number='150'></Number>
+                        <Number number={_this.wariningData?_this.wariningData.FTotalCount:0}></Number>
                         <span>预警总数</span>
                     </div>
                     <div className="side-content">
                         <Scrollbar horizontal={false} peed={0.8}>
                             <ul className='list'>
-                                {leftList1}
+                                {rightList}
                             </ul>
                         </Scrollbar>
                     </div>
@@ -233,36 +166,36 @@ export default class Index extends React.Component{
                                 <p><i className="iconfont icon-Equipment"></i></p>
                                 <p>项目数</p>
                             </div>
-                            <p className="l">634</p>
+                            <p className="l">{_this.count.ProjectCount}</p>
                         </li>
                         <li className='clearfix'>
                             <div className="l">
                                 <p><i className="iconfont icon-Equipment"></i></p>
                                 <p>设备数</p>
                             </div>
-                            <p className="l">634</p>
+                            <p className="l">{_this.count.BlocDeviceCount}</p>
                         </li>
                         <li className='clearfix'>
                             <div className="l">
                                 <p><i className="iconfont icon-Equipment"></i></p>
                                 <p>故障数</p>
                             </div>
-                            <p className="l">634</p>
+                            <p className="l">{_this.count.FaultCount}</p>
                         </li>
                         <li className='clearfix'>
                             <div className="l">
                                 <p><i className="iconfont icon-Equipment"></i></p>
                                 <p>运维数</p>
                             </div>
-                            <p className="l">634</p>
+                            <p className="l">{_this.count.MaintenanceCount}</p>
                         </li>
                     </ul>
                     <div id="map">
 
                     </div>
                     <div className='main-footer'>
-                            <Table width="545" height="170" title="实时预警" icon='icon-FireAlarm' label={this.state.tableLabel} data = {this.state.data}></Table>
-                            <Table width="545" height="170" title="实时火警" icon='icon-FireAlarm' label={this.state.tableLabel} data = {this.state.data}></Table>
+                            <Table width="545" height="170" title="实时预警" icon='icon-FireAlarm' label={this.state.tableLabel} data = {_this.wariningData?_this.wariningData.Data:[]}></Table>
+                            <Table width="545" height="170" title="实时火警" icon='icon-FireAlarm' label={this.state.tableLabel} data = {_this.fireAlarmData?_this.fireAlarmData.Data:[]}></Table>
                     </div>
                 </div>
             </div>

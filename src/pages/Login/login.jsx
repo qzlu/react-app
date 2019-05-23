@@ -65,7 +65,7 @@ class Login extends React.Component {
                     localStorage.setItem('userName',_this.userName)
                     localStorage.setItem('password',_this.password)
                 }
-                this.props.history.push('/')
+                this.props.history.push('')
             }).catch((err) => {
                 if(err.Result === 103){
                     this.setState({
