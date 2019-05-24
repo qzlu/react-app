@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route,Switch } from "react-router-dom";
+import {createBrowserHistory } from 'history'
 import routes from '@/router/index'
+const history = createBrowserHistory()
 class App extends React.Component {
   constructor(props){
     super(props)
@@ -21,7 +23,10 @@ class App extends React.Component {
       return 'Your work is not saved! Are you sure you want to leave?'
   }
   componentWillMount(){
-    console.log(123)
+    if(!sessionStorage.getItem('FToken')){
+      console.log(history)
+      history.push('/Login')
+    }
   }
   componentDidMount(){
     this.getHeight()

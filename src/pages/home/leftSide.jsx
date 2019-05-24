@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 class LeftSide extends Component{
-    constructor(props){
+    constructor(props:Object){
         super(props)
     }
     render(){

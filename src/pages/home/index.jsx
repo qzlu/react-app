@@ -41,6 +41,7 @@ export default class Index extends React.Component{
         this.logOut = this.logOut.bind(this)
         this.dropdownItemClick = this.dropdownItemClick.bind(this)
         this.queryData = this.queryData.bind(this)
+        this.showMarks = this.showMarks.bind(this)
     }
     dropdownItemClick(val){
         if(val === '1'){
@@ -65,9 +66,42 @@ export default class Index extends React.Component{
                 fireAlarmData,
                 count
             })
+            setTimeout(() => {
+                this.showMarks()
+            },0)
         }).catch((err) => {
             console.log(err)
         });
+    }
+    /**
+     * 显示点
+     */
+    showMarks(){
+        let Map = this.state.map
+        Map.clearOverlays()
+        this.state.fireList.forEach((item,i) => {
+            if(item.Flat < 0 || item.Flat == null ||item.Flng < 0 || item.Flng == null){
+              return
+            }
+            const point = new BMap.Point(item.Flat,item.Flng)
+            let marker,icon,img,temp
+            if(item.FireCount>0){
+                img = require('@/assets/image/cloud/index/bMap_icon_alarm.png')
+            }else{
+                img = require('@/assets/image/cloud/index/bMap_icon.png')
+            }
+           /*  icon = Map.setIcon(img,34,40) */
+            marker = new BMap.Marker(point,{icon:icon})
+            /* temp = this.content(item) */
+            Map.addOverlay(marker)
+            Map.centerAndZoom(point, 11);
+            marker.addEventListener('mouseover',e => {
+              Map.openInfoWindow(temp,point)
+            })
+            marker.addEventListener('dblclick',e => {
+              this.changeRouter(item)
+            })
+        })
     }
     changeRouter(item){
         sessionStorage.setItem('projectID',item.ProjectID)

@@ -92,7 +92,7 @@ class LineChart extends Component{
     }
     render(){
         return(
-            <div id={this.state.id} style={{width:'100%',height:'100%'}}>
+            <div  id={this.state.id} style={{width:'100%',height:'100%'}}>
             </div>
         )
     }

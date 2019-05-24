@@ -48,8 +48,13 @@ class Detaile extends Component{
                         data:[150, 232, 201, 154, 190, 330, 410]
                     },
                 ]
-            }
+            },
         }
+    }
+    count(a){
+        this.setState({
+            test:a
+        })
     }
     /**
      * 查询树状系统分类设备
@@ -131,7 +136,7 @@ class Detaile extends Component{
                                     <span>时间 </span>
                                     <DatePicker value={time}></DatePicker>
                                 </div>
-                                <LineChart data={lineData} color={["#FBA31E","#5FCDF2","#FF3600"]}></LineChart>
+                                <LineChart data={lineData} color={["#FBA31E","#5FCDF2","#FF3600"]} ></LineChart>
                             </div>
                         </div>
                     </div>
